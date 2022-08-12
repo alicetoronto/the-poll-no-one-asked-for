@@ -3,7 +3,6 @@ import firebase from './firebase';
 import { getDatabase, ref, set, onValue, get } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import DisplayResults from './DisplayResults';
-import { isCompositeComponent } from 'react-dom/test-utils';
 
 
 function App() {
@@ -71,13 +70,13 @@ function App() {
 		const dbRef = ref(database);
 
 		// clear prior responses from Firebase on page load
-		get(dbRef).then(response => {
-			const responseObj = response.val();
-			for (let response in responseObj) {
-				const dbRefKey = ref(database, `/${response}`);
-				set(dbRefKey, "");
-			}
-		})
+		// get(dbRef).then(response => {
+		// 	const responseObj = response.val();
+		// 	for (let response in responseObj) {
+		// 		const dbRefKey = ref(database, `/${response}`);
+		// 		set(dbRefKey, "");
+		// 	}
+		// })
 		
 	}, [])
 
