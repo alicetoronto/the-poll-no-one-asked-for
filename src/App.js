@@ -96,7 +96,7 @@ function App() {
             <label htmlFor="hike">Hike</label>
             <input type='radio' name='question2' value='hike' id='hike' onChange={handleChange}/>
             <div>
-
+              <DisplayResults q2FromDb={q2FromDb} />
             </div>
           </fieldset>
 
@@ -111,7 +111,7 @@ function App() {
             <label htmlFor="neither">Neither</label>
             <input type='radio' name='question3' value='neither' id='neither' onChange={handleChange}/>
             <div>
-
+              <DisplayResults q3FromDb={q3FromDb} />
             </div>
           </fieldset>
           <button onClick={handleSubmit}>Submit</button>
