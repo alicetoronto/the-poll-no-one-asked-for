@@ -1,11 +1,8 @@
-import './App.css';
+// import './App.css';
 import firebase from './firebase';
 import { getDatabase, ref, set, onValue, get } from 'firebase/database';
 import { useEffect, useState } from 'react';
-import DisplayResults from './DisplayResults';
-import BoringFigure from './assets/My_Wife_and_My_Mother-in-Law.jpg'
-import dress from './assets/The_dress_blueblackwhitegold.jpg'
-
+import Form from './Form'
 
 function App() {
 	// create state to store user selections pulled from the app
@@ -14,7 +11,7 @@ function App() {
 	// create state to store user selections pulled from Firebase
 	const [dataFromDb, setDataFromDb] = useState({});
 
-	// on change of any inputs, update state object
+	// on change of any inputs, update userInputs state
 	const handleChange = function(e) {
 		setUserInputs(current => {
 			if (e.target.name === "question1") {
@@ -33,7 +30,7 @@ function App() {
 		});
 	}
 
-	// on submit, update Firebase with user selections stored in state
+	// on submit, update Firebase with user selections stored in userInputs state
 	const handleSubmit = function(e) {
 		e.preventDefault();
 
@@ -92,7 +89,7 @@ function App() {
 		}
 	}
 
-	// on page load, clear prior data from Firebase and listen for changes. On change, grab the data and update state
+	// on page load, clear prior data from Firebase and listen for changes. On change, grab the data and update dataFromDb state
 	useEffect(function() {
 		const database = getDatabase(firebase);
 		const dbRef = ref(database);
@@ -111,115 +108,32 @@ function App() {
 		})
 	}, [])
 
-	// const questions = [
-	// 	{
-	// 		questionText: 'What’s your drink of choice?'
-	// 	}
-	// ]
-
+	const resetDB = function() {
+		const database = getDatabase(firebase);
+		const dbRef = ref(database);
+		get(dbRef).then(response => {
+			const responseObj = response.val();
+			// loop through every question object in Firebase and clear prior values
+			for (let response in responseObj) {
+				// console.log(responseObj[response])
+				for (let key in responseObj[response]) {
+					// console.log(responseObj[response][key]);
+					const dbRefKey = ref(database, `/${response}/${key}`);
+					const dbRefTotalCount = ref(database, '/totalCount');
+					set(dbRefKey, 0);
+					set(dbRefTotalCount, 0)
+				}
+			}
+		})
+	}
 
 	return (
 		<div>
 			<h1>The Poll No One Asked For</h1>
-			<form>
-				<fieldset>
-					<legend>What’s your drink of choice?</legend>
-					<label htmlFor="coffee">Coffee</label>
-					<input type='radio' name='question1' value='coffee' id='coffee' onChange={handleChange} />
-
-					<label htmlFor="tea">Tea</label>
-					<input type='radio' name="question1" value='tea' id='tea' onChange={handleChange}/>
-					
-					<label htmlFor="bubbletea">Bubbletea</label>
-					<input type='radio' name="question1" value='bubble tea' id='bubbletea' onChange={handleChange} />
-					<div>
-					<DisplayResults dataFromDb={dataFromDb} name='question1'/>
-					</div>
-				</fieldset>
-
-				<fieldset>
-					<legend>What colour is this dress?</legend>
-					<img src={dress} alt="A dress in bright light that is perceived by some as blue and black and by others as white and gold" />
-					<p>Photo by Cecilia Bleasdale</p>
-					<label htmlFor="blueBlack">Blue and black</label>
-					<input type='radio' name='question2' value='blue and black' id='blueBlack' onChange={handleChange} />
-
-					<label htmlFor="whiteGold">White and gold</label>
-					<input type='radio' name="question2" value='white and gold' id='whiteGold' onChange={handleChange} />
-
-					<label htmlFor="2015">This is 2015's problem</label>
-					<input type='radio' name="question2" value="this is 2015's problem" id='2015' onChange={handleChange} />
-					<div>
-						<DisplayResults dataFromDb={dataFromDb} name='question2' />
-					</div>
-				</fieldset>
-
-				<fieldset>
-					<legend>You have 2 free hours. Would you rather: nap, code, or hike?</legend>
-					<label htmlFor="nap">Nap</label>
-					<input type='radio' name='question3' value='nap' id='nap' onChange={handleChange}/>
-
-					<label htmlFor="code">Code</label>
-					<input type='radio' name='question3' value='code' id='code' onChange={handleChange}/>
-
-					<label htmlFor="hike">Hike</label>
-					<input type='radio' name='question3' value='hike' id='hike' onChange={handleChange}/>
-					<div>
-						<DisplayResults dataFromDb={dataFromDb} name='question3' />
-					</div>
-				</fieldset>
-
-				<fieldset>
-					<legend>What do did you see first in this image?</legend>
-					<img src={BoringFigure} alt="optical illusion depicting both a young woman and an elderly woman"/>
-					<p><a href="https://en.wikipedia.org/wiki/My_Wife_and_My_Mother-in-Law#/media/File:My_Wife_and_My_Mother-in-Law.jpg">W. E. Hill, Public domain, via Wikimedia Commons</a></p>
-					<label htmlFor="mother">Mother-in-law</label>
-					<input type='radio' name='question4' value='mother-in-law' id='mother' onChange={handleChange} />
-
-					<label htmlFor="wife">Wife</label>
-					<input type='radio' name='question4' value='wife' id='wife' onChange={handleChange} />
-
-					<label htmlFor="neither">Neither</label>
-					<input type='radio' name='question4' value='neither' id='neither' onChange={handleChange} />
-					<div>
-						<DisplayResults dataFromDb={dataFromDb} name='question4' />
-					</div>
-				</fieldset>
-
-				<fieldset>
-					<legend>Are you a dog person, cat person, or neither?</legend>
-					<label htmlFor="dog">Dog</label>
-					<input type='radio' name='question5' value='dog' id='dog' onChange={handleChange}/>
-
-					<label htmlFor="cat">Cat</label>
-					<input type='radio' name='question5' value='cat' id='cat' onChange={handleChange}/>
-
-					<label htmlFor="heartless">I'm heartless</label>
-					<input type='radio' name='question5' value='heartless' id='heartless' onChange={handleChange}/>
-					<div>
-					<DisplayResults dataFromDb={dataFromDb} name='question5' />
-					</div>
-				</fieldset>
-
-				<fieldset>
-					<legend>What is 6 {'\u00F7'} 2(1+2)?</legend>
-					<label htmlFor="1">1</label>
-					<input type='radio' name='question6' value='1' id='1' onChange={handleChange} />
-
-					<label htmlFor="9">9</label>
-					<input type='radio' name="question6" value='9' id='9' onChange={handleChange} />
-
-					<label htmlFor="noMath">I can't do math. Why are you asking me?</label>
-					<input type='radio' name="question6" value="'can't math'" id='noMath' onChange={handleChange} />
-					<div>
-						<DisplayResults dataFromDb={dataFromDb} name='question6' />
-					</div>
-				</fieldset>
-
-				<button onClick={handleSubmit}>Submit</button>
-			</form>
+			<Form handleChange={handleChange} handleSubmit={handleSubmit} dataFromDb={dataFromDb}/>
+			<button onClick={resetDB}>Reset database</button>
 		</div>
-	);
+	)
 }
 
 export default App;

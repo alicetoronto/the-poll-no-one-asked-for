@@ -4,13 +4,17 @@ const DisplayResults = function ({ dataFromDb, name }) {
     for (let item in dataFromDb) {
         // console.log(item);
         // console.log(dataFromDb[item])
-        // create a variable to store the total count for the user's selected option and a variable to store the total count of all responses to calculate the percentage of individuals who selected the same option as the user
+        // variable to store the user's currently selected option
         const selectedOption = dataFromDb[item].CurrentResponse;
+        // variable to store the total count for the user's selected option
+        const selectedOptionTotal = (dataFromDb[item][selectedOption]);
+        // variable to store the total count of all responses
         const totalCount = dataFromDb.totalCount;
-        if (item === name) {
-            const selectedOptionTotal = (dataFromDb[item][selectedOption]);
-            // console.log()
-            return <p>You're among {((selectedOptionTotal / totalCount) * 100).toFixed(0)}% ({selectedOptionTotal}/{totalCount}) of people who chose {dataFromDb[item].CurrentResponse}!</p>
+        if (selectedOption) {
+            if (item === name) {
+                // console.log()
+                return <p>You're among the {((selectedOptionTotal / totalCount) * 100).toFixed(0)}% ({selectedOptionTotal}/{totalCount}) of people who chose {selectedOption}!</p>
+            }
         }
     }
 }
