@@ -10,7 +10,7 @@ const DisplayResults = function ({ dataFromDb, name }) {
         if (item === name) {
             const selectedOptionTotal = (dataFromDb[item][selectedOption]);
             // console.log()
-            return <p>You're amongst {((selectedOptionTotal / totalCount) * 100).toFixed(0)}% ({selectedOptionTotal}/{totalCount}) of people who chose {dataFromDb[item].CurrentResponse}!</p>
+            return <p>You're among {((selectedOptionTotal / totalCount) * 100).toFixed(0)}% ({selectedOptionTotal}/{totalCount}) of people who chose {dataFromDb[item].CurrentResponse}!</p>
         }
     }
 }
