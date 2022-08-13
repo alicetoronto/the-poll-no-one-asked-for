@@ -1,3 +1,16 @@
+/* * {
+  border: red solid 1px;
+} */
+
+html {
+  font-size: 125%;
+}
+
+:root {
+  --teal: rgb(117, 219, 234);
+  --pink: rgb(240, 192, 224);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,10 +18,163 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.wrapper {
+  max-width: 1200px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+header {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url(./assets/heather-ford-Fq54FqucgCE-unsplash.jpg);
+  background-size: cover;
+  background-position: center 35%;
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+h1 {
+  text-shadow: 5px 2px yellow;
+  font-style: italic;
+}
+
+.start {
+  border: none;
+  background-color: black;
+  color: yellow;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  padding: 15px 30px;
+  font-style: italic;
+}
+
+.credit {
+  font-size: 0.6rem;
+  align-self: flex-start;
+  position: absolute;
+  bottom: 0;
+  background-color: var(--pink);
+  padding: 5px;
+}
+
+form {
+  margin: 50px 0;
+}
+
+fieldset {
+  /* border: none; */
+  border: 3px var(--pink) solid;
+  border-radius: 10px;
+  margin: 80px 0;
+  padding: 30px;
+  position: relative;
+  /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+}
+
+legend {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin: 15px 0;
+  background-color: var(--pink);
+  border-radius: 10px;
+  padding: 15px 30px;
+  width: 100%;
+  /* position: relative;
+  top: -10px;
+  left: -10px; */
+}
+
+.responseContainer {
+  margin: 15px; 
+  display: flex;
+}
+
+label {
+  order: 1;
+  margin-left: 10px
+}
+
+.imgContainer {
+  width: 200px;
+  border: 5px solid pink;
+  margin: 0 auto;
+}
+
+img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.caption {
+  margin: 5px auto;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  text-align: center;
+  width: 200px;
+}
+
+.resultsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--teal);
+  padding: 50px;
+  width: 30%;
+  min-height: 150px;
+  border-radius: 10px;
+  position: absolute;
+  z-index: 10;
+  right: -100px;
+  top: 0;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.submit {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 15px;
+  background-color: var(--teal);
+  border: none;
+  text-shadow: 2px 2px yellow;
+  border-radius: 10px;
+  font-style: italic;
+}
+
+.submit:hover,
+.submit:focus {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.reset {
+  /* display: none; */
+}
+
+.submitNote,
+footer {
+  text-align: center;
+}
+
+footer {
+  margin: 20px 0;
+  font-size: 0.9rem;
+}
+
+a {
+  color: black;
+}
+
+.bold {
+  font-weight: bold;
 }

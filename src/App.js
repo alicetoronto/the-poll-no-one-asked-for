@@ -1,8 +1,9 @@
-// import './App.css';
 import firebase from './firebase';
 import { getDatabase, ref, set, onValue, get } from 'firebase/database';
 import { useEffect, useState } from 'react';
-import Form from './Form'
+import BoringFigure from './assets/My_Wife_and_My_Mother-in-Law.jpg';
+import dress from './assets/The_dress_blueblackwhitegold.jpg';
+import Form from './Form';
 
 function App() {
 	// create state to store user selections pulled from the app
@@ -13,28 +14,23 @@ function App() {
 
 	// on change of any inputs, update userInputs state
 	const handleChange = function(e) {
-		setUserInputs(current => {
-			if (e.target.name === "question1") {
-				return {...current, question1: e.target.value}
-			} else if (e.target.name === "question2") {
-				return { ...current, question2: e.target.value }
-			} else if (e.target.name === "question3") {
-				return { ...current, question3: e.target.value }
-			} else if (e.target.name === "question4") {
-				return { ...current, question4: e.target.value }
-			} else if (e.target.name === "question5") {
-				return { ...current, question5: e.target.value }
-			} else if (e.target.name === "question6") {
-				return { ...current, question6: e.target.value }
-			}
-		});
+		const qArray = questions.map(question => {
+			return question.questionName 
+		})
+		// console.log(qArray);
+		qArray.forEach(q => {
+			if (e.target.name === q) {
+				setUserInputs(current => {
+					return { ...current, [q]: e.target.value }
+				});
+			} 
+		})
 	}
 
 	// on submit, update Firebase with user selections stored in userInputs state
 	const handleSubmit = function(e) {
 		e.preventDefault();
-
-		// only update if state contains all 6 responses
+		// only update if userInputs state contains all 6 responses
 		if (Object.keys(userInputs).length === 6) {
 			const database = getDatabase(firebase);
 			const dbRef = ref(database);
@@ -108,6 +104,7 @@ function App() {
 		})
 	}, [])
 
+	// on click of the Reset Database button, clear all data from the database
 	const resetDB = function() {
 		const database = getDatabase(firebase);
 		const dbRef = ref(database);
@@ -127,11 +124,143 @@ function App() {
 		})
 	}
 
+	// array storing all question data
+	const questions = [
+		{
+			legend: 'What’s your go-to drink?',
+			questionName: 'question1',
+			firstOption: {
+				labelFor: 'coffee',
+				labelText: 'Coffee',
+				inputValue: 'coffee'
+			},
+			secondOption: {
+				labelFor: 'tea',
+				labelText: 'Tea',
+				inputValue: 'tea'
+			},
+			thirdOption: {
+				labelFor: 'bubbletea',
+				labelText: 'Bubble Tea',
+				inputValue: 'bubble tea'
+			}
+		},
+		{
+			legend: 'What colour is this dress?',
+			questionName: 'question2',
+			imgSrc: dress,
+			alt: 'A dress in bright light that is perceived by some as blue and black and by others as white and gold',
+			caption: 'Photo by Cecilia Bleasdale',
+			firstOption: {
+				labelFor: 'blueBlack',
+				labelText: 'Blue and black',
+				inputValue: 'blue and black'
+			},
+			secondOption: {
+				labelFor: 'whiteGold',
+				labelText: 'White and gold',
+				inputValue: 'white and gold'
+			},
+			thirdOption: {
+				labelFor: '2015',
+				labelText: "This is 2015's problem",
+				inputValue: "this is 2015's problem"
+			}
+		},
+		{
+			legend: 'You have 2 free hours. Would you rather...?',
+			questionName: 'question3',
+			firstOption: {
+				labelFor: 'nap',
+				labelText: 'Nap',
+				inputValue: 'nap'
+			},
+			secondOption: {
+				labelFor: 'code',
+				labelText: 'Code',
+				inputValue: 'code'
+			},
+			thirdOption: {
+				labelFor: 'hike',
+				labelText: 'Hike',
+				inputValue: 'hike'
+			}
+		},
+		{
+			legend: 'What did you see first in this image? 🔮',
+			questionName: 'question4',
+			imgSrc: BoringFigure,
+			alt: 'optical illusion depicting both a young woman and an elderly woman',
+			caption: 'W. E. Hill, Public domain, via Wikimedia Commons',
+			link: 'https://en.wikipedia.org/wiki/My_Wife_and_My_Mother-in-Law#/media/File:My_Wife_and_My_Mother-in-Law.jpg',
+			firstOption: {
+				labelFor: 'mother-in-law',
+				labelText: 'Mother-in-law',
+				inputValue: 'mother-in-law'
+			},
+			secondOption: {
+				labelFor: 'wife',
+				labelText: 'Wife',
+				inputValue: 'wife'
+			},
+			thirdOption: {
+				labelFor: 'neither',
+				labelText: 'Neither',
+				inputValue: 'neither'
+			}
+		},
+		{
+			legend: 'Are you a dog person, cat person, or neither?',
+			questionName: 'question5',
+			firstOption: {
+				labelFor: 'dog',
+				labelText: 'Dog',
+				inputValue: 'dog'
+			},
+			secondOption: {
+				labelFor: 'cat',
+				labelText: 'Cat',
+				inputValue: 'cat'
+			},
+			thirdOption: {
+				labelFor: 'heartless',
+				labelText: "I'm heartless",
+				inputValue: 'heartless'
+			}
+		},
+		{
+			legend: 'What is 6 \u00F7 2(1+2)?',
+			questionName: 'question6',
+			firstOption: {
+				labelFor: '1',
+				labelText: '1',
+				inputValue: '1'
+			},
+			secondOption: {
+				labelFor: '9',
+				labelText: '9',
+				inputValue: '9'
+			},
+			thirdOption: {
+				labelFor: 'noMath',
+				labelText: "I can't math. Why are you asking me? 😭",
+				inputValue: "can't math"
+			}
+		},
+	];
+
 	return (
 		<div>
-			<h1>The Poll No One Asked For</h1>
-			<Form handleChange={handleChange} handleSubmit={handleSubmit} dataFromDb={dataFromDb}/>
-			<button onClick={resetDB}>Reset database</button>
+			<header>
+				<h1>The Poll No One Asked For</h1>
+				<button className='start'>start the poll</button>
+				<p className='credit'>Photo by <a href="https://unsplash.com/@the_modern_life_mrs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Heather Ford</a> on <a href="https://unsplash.com/s/photos/purple-background-fun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></p>
+			</header>
+			<div className='wrapper'>
+				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} dataFromDb={dataFromDb}/>
+				<button className='reset' onClick={resetDB}>Reset database</button>
+			</div>
+			<footer>Created at Juno College</footer>
 		</div>
 	)
 }

@@ -10,12 +10,12 @@ const DisplayResults = function ({ dataFromDb, name }) {
         const selectedOptionTotal = (dataFromDb[item][selectedOption]);
         // variable to store the total count of all responses
         const totalCount = dataFromDb.totalCount;
-        if (selectedOption) {
+        // if (selectedOption) {
             if (item === name) {
                 // console.log()
-                return <p>You're among the {((selectedOptionTotal / totalCount) * 100).toFixed(0)}% ({selectedOptionTotal}/{totalCount}) of people who chose {selectedOption}!</p>
+                return <p>You're among the <span className="bold">{((selectedOptionTotal / totalCount) * 100).toFixed(0)}%</span> of people ({selectedOptionTotal} out of {totalCount}) who chose "{selectedOption}"!</p>
             }
-        }
+        // }
     }
 }
 
