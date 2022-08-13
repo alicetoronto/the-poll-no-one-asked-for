@@ -16,20 +16,11 @@ function App() {
 	const handleChange = function(e) {
 		setUserInputs(current => {
 			if (e.target.name === "question1") {
-				return {
-					...current,
-					question1: e.target.value
-				}
+				return {...current, question1: e.target.value}
 			} else if (e.target.name === "question2") {
-				return {
-					...current,
-					question2: e.target.value
-				}
+				return { ...current, question2: e.target.value }
 			} else if (e.target.name === "question3") {
-				return {
-					...current,
-					question3: e.target.value
-				}
+				return { ...current, question3: e.target.value }
 			}
 		});
 	}
@@ -44,18 +35,47 @@ function App() {
 			const dbRef = ref(database);
 			get(dbRef).then(response => {
 				const responseObj = response.val();
-				// loop through each item in the UserInputs state object and match the key (i.e., the question number) against the keys in Firebase. If the keys (i.e.,question numbers) match, update the key value in Firebase (i.e., the user's response to that question number)
+				// console.log(responseObj);
+				// console.log(responseObj.totalCount);
+				// update totalCount of responses in Firebase by 1
+				let totalResponseCount = responseObj.totalCount;
+				totalResponseCount = totalResponseCount + 1;
+				// console.log(totalResponseCount);
+				const dbRefTotalCount = ref(database, '/totalCount');
+				set(dbRefTotalCount, totalResponseCount);
+
+				// loop through each item in the UserInputs state object and match the key (i.e., the question number) against the keys in Firebase. If the keys (i.e.,question numbers) match, then match the nested keys (i.e., response option) and if those match, increase its value by 1 in Firebase (i.e., update the count of that response by 1)
 				for (let userInput in userInputs) {
 					for (let response in responseObj) {
 						if (userInput === response) {
-							const dbRefKey = ref(database, `/${response}`);
-							set(dbRefKey, userInputs[userInput])
+							// console.log(userInput);
+							// console.log(response);
+							// console.log('yes');
+							// console.log(responseObj[response]);
+							let questionObj = responseObj[response];
+							for (let key in questionObj) {
+								// console.log(key);
+								// console.log(userInputs[userInput]);
+								if (userInputs[userInput] === key) {
+									// console.log("match")
+									// console.log(key);
+									const dbRefKey = ref(database, `/${response}/${key}`);
+									const dbRefCurrentResponse = ref(database, `/${response}/CurrentResponse`);
+									get(dbRefKey).then(results => {
+										let responseCount = results.val();
+										responseCount = responseCount + 1;
+										// console.log(responseCount);
+										set(dbRefKey, responseCount);
+										set(dbRefCurrentResponse, userInputs[userInput]);
+									})
+								}
+							}
 						}
 					}
 				}
 				// on database change, update state of dataFromDb
 				onValue(dbRef, response => {
-					console.log(response.val());
+					// console.log(response.val());
 					setDataFromDb(response.val())
 				});
 			});
@@ -69,15 +89,18 @@ function App() {
 		const database = getDatabase(firebase);
 		const dbRef = ref(database);
 
-		// clear prior responses from Firebase on page load
-		// get(dbRef).then(response => {
-		// 	const responseObj = response.val();
-		// 	for (let response in responseObj) {
-		// 		const dbRefKey = ref(database, `/${response}`);
-		// 		set(dbRefKey, "");
-		// 	}
-		// })
-		
+		// clear prior values stored in CurrentResponse key in Firebase on page load
+		get(dbRef).then(response => {
+			const responseObj = response.val();
+			// loop through every question object in Firebase and clear prior values
+			for (let response in responseObj) {
+				// if there is a value stored in CurrentResponse, set it to an empty string
+				if (responseObj[response].CurrentResponse) {
+					const dbRefKey = ref(database, `/${response}/CurrentResponse`);
+					set(dbRefKey, "");
+				}
+			}
+		})
 	}, [])
 
 	return (
@@ -93,14 +116,14 @@ function App() {
 					<input type='radio' name="question1" value='tea' id='tea' onChange={handleChange}/>
 					
 					<label htmlFor="bubbletea">Bubbletea</label>
-					<input type='radio' name="question1" value='bubbletea' id='bubbletea' onChange={handleChange} />
+					<input type='radio' name="question1" value='bubble tea' id='bubbletea' onChange={handleChange} />
 					<div>
 					<DisplayResults dataFromDb={dataFromDb} name='question1'/>
 					</div>
 				</fieldset>
 
 				<fieldset>
-					<legend>You have 2 free hours: nap, code, hike?</legend>
+					<legend>You have 2 free hours. Would you rather: nap, code, or hike?</legend>
 					<label htmlFor="nap">Nap</label>
 					<input type='radio' name='question2' value='nap' id='nap' onChange={handleChange}/>
 
