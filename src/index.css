@@ -70,7 +70,7 @@ button:focus {
 /* header */
 header {
   height: 100vh;
-  background-image: url(./assets/heather-ford-Fq54FqucgCE-unsplash.jpg);
+  background-image: url('./assets/heather-ford-Fq54FqucgCE-unsplash.jpg');
   background-size: cover;
   background-position: center 35%;
 }

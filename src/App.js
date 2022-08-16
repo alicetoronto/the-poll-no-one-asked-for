@@ -17,7 +17,7 @@ function App() {
 	// create state to store user selections pulled from Firebase
 	const [dataFromDb, setDataFromDb] = useState({});
 
-	// create function to scroll to beginning of poll
+	// on click of "Start Poll" button, scroll to beginning of poll
 	const startPoll = function () {
 		document.getElementById('form').scrollIntoView();
 	}
@@ -137,10 +137,10 @@ function App() {
 					set(dbRefKey, "");
 				}
 			}
-		})
-	}, [])
+		});
+	}, []);
 
-	// on click of the Reset Database button, clear all data from the database
+	// on click of the "Reset Database" button, clear all data from the database (set to display none)
 	const resetDB = function() {
 		const database = getDatabase(firebase);
 		const dbRef = ref(database);
@@ -160,6 +160,7 @@ function App() {
 		})
 	}
 
+	// on click of the "Take the Poll Again" button, refresh the page
 	const handleRefresh = function() {
 		document.location.reload(true);
 	}
@@ -170,17 +171,14 @@ function App() {
 			legend: 'What’s your go-to drink?',
 			questionName: 'question1',
 			firstOption: {
-				labelFor: 'coffee',
 				labelText: 'Coffee',
 				inputValue: 'coffee'
 			},
 			secondOption: {
-				labelFor: 'tea',
 				labelText: 'Tea',
 				inputValue: 'tea'
 			},
 			thirdOption: {
-				labelFor: 'bubbletea',
 				labelText: 'Bubble Tea',
 				inputValue: 'bubble tea'
 			}
@@ -192,17 +190,14 @@ function App() {
 			alt: 'A dress in bright light that is perceived by some as blue and black and by others as white and gold',
 			caption: 'Photo by Cecilia Bleasdale',
 			firstOption: {
-				labelFor: 'blueBlack',
 				labelText: 'Blue and black',
 				inputValue: 'blue and black'
 			},
 			secondOption: {
-				labelFor: 'whiteGold',
 				labelText: 'White and gold',
 				inputValue: 'white and gold'
 			},
 			thirdOption: {
-				labelFor: '2015',
 				labelText: "This is 2015's problem",
 				inputValue: "this is 2015's problem"
 			}
@@ -211,17 +206,14 @@ function App() {
 			legend: 'You have 2 free hours. Would you rather...?',
 			questionName: 'question3',
 			firstOption: {
-				labelFor: 'nap',
 				labelText: 'Nap',
 				inputValue: 'nap'
 			},
 			secondOption: {
-				labelFor: 'code',
 				labelText: 'Code',
 				inputValue: 'code'
 			},
 			thirdOption: {
-				labelFor: 'hike',
 				labelText: 'Hike',
 				inputValue: 'hike'
 			}
@@ -234,17 +226,14 @@ function App() {
 			caption: 'W. E. Hill, Public domain, via Wikimedia Commons',
 			link: 'https://en.wikipedia.org/wiki/My_Wife_and_My_Mother-in-Law#/media/File:My_Wife_and_My_Mother-in-Law.jpg',
 			firstOption: {
-				labelFor: 'mother-in-law',
 				labelText: 'Mother-in-law',
 				inputValue: 'mother-in-law'
 			},
 			secondOption: {
-				labelFor: 'wife',
 				labelText: 'Wife',
 				inputValue: 'wife'
 			},
 			thirdOption: {
-				labelFor: 'neither',
 				labelText: 'Neither',
 				inputValue: 'neither'
 			}
@@ -253,17 +242,14 @@ function App() {
 			legend: 'Are you a dog person, cat person, or neither?',
 			questionName: 'question5',
 			firstOption: {
-				labelFor: 'dog',
 				labelText: 'Dog',
 				inputValue: 'dog'
 			},
 			secondOption: {
-				labelFor: 'cat',
 				labelText: 'Cat',
 				inputValue: 'cat'
 			},
 			thirdOption: {
-				labelFor: 'heartless',
 				labelText: "I'm heartless",
 				inputValue: 'heartless'
 			}
@@ -272,24 +258,19 @@ function App() {
 			legend: 'What is 6 \u00F7 2(1+2)?',
 			questionName: 'question6',
 			firstOption: {
-				labelFor: '1',
 				labelText: '1',
 				inputValue: '1'
 			},
 			secondOption: {
-				labelFor: '9',
 				labelText: '9',
 				inputValue: '9'
 			},
 			thirdOption: {
-				labelFor: 'noMath',
 				labelText: "I can't math. Why are you asking me? 😭",
 				inputValue: "can't math"
 			}
 		},
 	];
-
-	// console.log(dataFromDb)
 
 	return (
 		<div>
@@ -299,8 +280,13 @@ function App() {
 				<p className='credit'>Photo by <a href="https://unsplash.com/@the_modern_life_mrs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Heather Ford</a> on <a href="https://unsplash.com/s/photos/purple-background-fun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></p>
 			</header>
 			<div className='wrapper'>
+				{/* render Form component */}
 				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} dataFromDb={dataFromDb}/>
+
+				{/* "Take the Poll Again" button - displays upon submit */}
 				<button className='refresh' id='refresh' onClick={handleRefresh}>take the poll again</button>
+
+				{/* "Reset Database" button - display is set to none (internal use) */}
 				<button className='reset' onClick={resetDB}>Reset database</button>
 			</div>
 			<footer className='bold italic'>Created at <a href="https://junocollege.com/">Juno College</a></footer>
