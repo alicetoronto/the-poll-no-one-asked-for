@@ -2,8 +2,11 @@
   border: red solid 1px;
 } */
 
+/* general styles */
+
 html {
   font-size: 125%;
+  scroll-behavior: smooth;
 }
 
 :root {
@@ -20,74 +23,98 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.wrapper,
+header,
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .wrapper {
   max-width: 1200px;
   width: 80%;
   margin: 0 auto;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background-color: black;
+  color: yellow;
+  font-size: clamp(1.25rem, 1.16rem + 0.57vw, 1.5rem);
+  font-style: italic;
+  text-transform: uppercase;
+  padding: 15px 30px;
+}
+
+button:hover,
+button:focus {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* header */
 header {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-image: url(./assets/heather-ford-Fq54FqucgCE-unsplash.jpg);
   background-size: cover;
   background-position: center 35%;
-  font-size: 2.5rem;
-  text-align: center;
 }
 
 h1 {
   text-shadow: 5px 2px yellow;
-  font-style: italic;
-}
-
-.start {
-  border: none;
-  background-color: black;
-  color: yellow;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  padding: 15px 30px;
-  font-style: italic;
+  font-size: clamp(3rem, 2.27rem + 4.55vw, 5rem);
+  text-align: center;
 }
 
 .credit {
+  background-color: var(--pink);
   font-size: 0.6rem;
   align-self: flex-start;
   position: absolute;
   bottom: 0;
-  background-color: var(--pink);
-  padding: 5px;
+  margin: 0;
+  padding: 5px 10px;
 }
 
+/* form and form content styling */
 form {
-  margin: 50px 0;
+  margin-bottom: 50px;
+}
+
+fieldset,
+legend,
+.resultsContainer {
+  border-radius: 10px;
 }
 
 fieldset {
-  /* border: none; */
-  border: 3px var(--pink) solid;
-  border-radius: 10px;
+  position: relative;
+  border: 5px var(--pink) solid;
   margin: 80px 0;
   padding: 30px;
-  position: relative;
-  /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
 }
 
 legend {
-  font-weight: bold;
   font-size: 1.25rem;
-  margin: 15px 0;
   background-color: var(--pink);
-  border-radius: 10px;
-  padding: 15px 30px;
   width: 100%;
-  /* position: relative;
-  top: -10px;
-  left: -10px; */
+  margin: 15px 0;
+  padding: 15px 30px;
 }
 
 .responseContainer {
@@ -121,44 +148,37 @@ img {
   width: 200px;
 }
 
+/* styling of results container that gets displayed back to page on submit */
 .resultsContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: var(--teal);
   padding: 50px;
-  width: 30%;
+  width: 300px;
   min-height: 150px;
-  border-radius: 10px;
   position: absolute;
   z-index: 10;
   right: -100px;
   top: 0;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+/* submission area (submit button, refresh button, reset button)  */
+.submitNote {
+  font-size: 1.25rem;
+  margin: 50px;
 }
 
 .submit {
   width: 100%;
-  font-size: 1rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  padding: 15px;
-  background-color: var(--teal);
-  border: none;
-  text-shadow: 2px 2px yellow;
-  border-radius: 10px;
-  font-style: italic;
 }
 
-.submit:hover,
-.submit:focus {
-  cursor: pointer;
-  transform: scale(1.1);
+.refresh {
+  display: none;
 }
 
 .reset {
-  /* display: none; */
+  display: none;
+  font-size: 0.9rem;
+  margin: 30px;
 }
 
 .submitNote,
@@ -166,15 +186,42 @@ footer {
   text-align: center;
 }
 
+/* footer */
 footer {
-  margin: 20px 0;
+  margin-top: 50px;
+  padding: 25px;
   font-size: 0.9rem;
+  background-color: var(--teal);
+  text-shadow: 2px 2px yellow;
 }
 
-a {
-  color: black;
-}
+/* media queries */
 
-.bold {
-  font-weight: bold;
+@media (max-width: 500px) {
+  .wrapper {
+    width: 85%;
+  }
+  form {
+    margin-top: 30px;
+  }
+  fieldset {
+    margin: 30px auto;
+    padding: 15px;
+  }
+  legend {
+    margin-left: -30px;
+  }
+  .responseContainer {
+    margin: 15px 0;
+  }
+  .submitNote {
+    margin: 50px 0;
+
+  }
+  .resultsContainer {
+    position: static;
+    width: auto;
+    padding: 0 30px;
+    margin-top: 30px;
+  }
 }

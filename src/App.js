@@ -6,32 +6,50 @@ import dress from './assets/The_dress_blueblackwhitegold.jpg';
 import Form from './Form';
 
 function App() {
+	// create variables to store queried elements
+	const form = document.getElementById('form');
+	const submitButton = document.getElementById('submit');
+	const inputsArray = document.querySelectorAll('input');
+
 	// create state to store user selections pulled from the app
 	const [userInputs, setUserInputs] = useState({});
 
 	// create state to store user selections pulled from Firebase
 	const [dataFromDb, setDataFromDb] = useState({});
 
+	// create function to scroll to beginning of poll
+	const startPoll = function () {
+		document.getElementById('form').scrollIntoView();
+	}
 	// on change of any inputs, update userInputs state
 	const handleChange = function(e) {
+		// create an array of the question names from the questions array below
 		const qArray = questions.map(question => {
 			return question.questionName 
 		})
 		// console.log(qArray);
-		qArray.forEach(q => {
+		// for each question in the array, check if event target name matches the question name. if matched, update the userInputs state with the value
+		qArray.forEach((q, index) => {
 			if (e.target.name === q) {
+				// scroll to next question once change in input is detected
+				if (index < (qArray.length - 1)) {
+					document.getElementById(qArray[index + 1]).scrollIntoView();
+				}
+				// update userInputs state to include the selected value of the current question (create copy of the userInputs array and add new key value pair consisting of question# and the response selected)
 				setUserInputs(current => {
 					return { ...current, [q]: e.target.value }
 				});
 			} 
 		})
+		
 	}
 
 	// on submit, update Firebase with user selections stored in userInputs state
 	const handleSubmit = function(e) {
 		e.preventDefault();
+		// console.log(questions.length);
 		// only update if userInputs state contains all 6 responses
-		if (Object.keys(userInputs).length === 6) {
+		if (Object.keys(userInputs).length === questions.length) {
 			const database = getDatabase(firebase);
 			const dbRef = ref(database);
 			get(dbRef).then(response => {
@@ -74,11 +92,29 @@ function App() {
 						}
 					}
 				}
+
 				// on database change, update state of dataFromDb
 				onValue(dbRef, response => {
 					// console.log(response.val());
 					setDataFromDb(response.val())
 				});
+
+				// disable all radio inputs
+				inputsArray.forEach(input => {
+					input.setAttribute('disabled', '')
+				});
+
+				// disable submit button and change styling
+				submitButton.disabled = true;
+				submitButton.style.color = 'lightgrey';
+				submitButton.style.transform = 'scale(1)';
+				submitButton.style.cursor = 'default';
+
+				// scroll to first question to show results from the top
+				form.scrollIntoView();	
+
+				// display the "Take the poll again" button
+				document.getElementById('refresh').style.display = 'block';
 			});
 		} else { // alert message if any of the questions were skipped
 			alert('Please select a response for each question!')
@@ -122,6 +158,10 @@ function App() {
 				}
 			}
 		})
+	}
+
+	const handleRefresh = function() {
+		document.location.reload(true);
 	}
 
 	// array storing all question data
@@ -249,18 +289,21 @@ function App() {
 		},
 	];
 
+	// console.log(dataFromDb)
+
 	return (
 		<div>
 			<header>
-				<h1>The Poll No One Asked For</h1>
-				<button className='start'>start the poll</button>
+				<h1 className='italic'>The Poll No One Asked For</h1>
+				<button className='start' onClick={startPoll}>start the poll</button>
 				<p className='credit'>Photo by <a href="https://unsplash.com/@the_modern_life_mrs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Heather Ford</a> on <a href="https://unsplash.com/s/photos/purple-background-fun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></p>
 			</header>
 			<div className='wrapper'>
 				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} dataFromDb={dataFromDb}/>
+				<button className='refresh' id='refresh' onClick={handleRefresh}>take the poll again</button>
 				<button className='reset' onClick={resetDB}>Reset database</button>
 			</div>
-			<footer>Created at Juno College</footer>
+			<footer className='bold italic'>Created at <a href="https://junocollege.com/">Juno College</a></footer>
 		</div>
 	)
 }

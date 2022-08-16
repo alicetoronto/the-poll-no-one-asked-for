@@ -2,12 +2,12 @@ import DisplayResults from './DisplayResults';
 
 function Form({questions, handleChange, handleSubmit, dataFromDb}) {
     return (
-        <form>
+        <form id='form'>
             {
                 questions.map((question) => {
                     return (
-                        <fieldset key={question.questionName}>
-                            <legend>{question.legend}</legend>
+                        <fieldset key={question.questionName} id={question.questionName}>
+                            <legend className='bold'>{question.legend}</legend>
                             {question.imgSrc
                                 ?
                                 <div>
@@ -44,8 +44,8 @@ function Form({questions, handleChange, handleSubmit, dataFromDb}) {
                     )
                 })
             }
-            <p className='submitNote'>Submit to see how your responses compare to others who took the poll!</p>
-            <button className='submit' onClick={handleSubmit}>Submit</button>
+            <p className='submitNote bold italic'>Submit to see how your responses compare to others who took the poll!</p>
+            <button className='submit' id="submit" onClick={handleSubmit}>Submit</button>
         </form>
     );
 }

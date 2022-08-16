@@ -1,6 +1,7 @@
 const DisplayResults = function ({ dataFromDb, name }) {
     // console.log(dataFromDb);
     // console.log(dataFromDb.totalCount)
+    // loop through each response in the dataFromDb state object. If response's question name matches the name of the input, display the result
     for (let item in dataFromDb) {
         // console.log(item);
         // console.log(dataFromDb[item])
