@@ -36,7 +36,7 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
     // display question to the page
     const current = questions[currentQuestion];
     return (
-        <form id='form'>
+        <form>
             <fieldset key={current.questionName} id={current.questionName}>
                 <legend className='bold'>{current.legend}</legend>
                     {current.imgSrc

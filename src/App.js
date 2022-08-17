@@ -1,6 +1,6 @@
 import firebase from './firebase';
 import { getDatabase, ref, set, onValue, get } from 'firebase/database';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import BoringFigure from './assets/My_Wife_and_My_Mother-in-Law.jpg';
 import dress from './assets/The_dress_blueblackwhitegold.jpg';
 import Form from './Form';
@@ -19,9 +19,15 @@ function App() {
 	const [submitted, setSubmitted] = useState(false);
 
 	// on click of "Start Poll" button, scroll to beginning of poll
+	// use useRef hook and assign ref prop to the div containing the form element in order to reference it
+	const formRef = useRef(null);
 	const startPoll = function () {
-		document.getElementById('form').scrollIntoView();
+		formRef.current.scrollIntoView();
 	}
+
+	// use useRef hook and assign ref prop to the "Take the Poll Again" button element in order to reference it in the handleSubmit function (to set display to block instead of none)
+	const refreshButton = useRef(null);
+
 	// on change of any inputs, update userInputs state
 	const handleChange = function(e) {
 		// create an array of the question names from the questions array below
@@ -87,7 +93,7 @@ function App() {
 				// navigate to first question to show results from the beginning
 				setCurrentQuestion(0);
 				// display the "Take the poll again" button
-				document.getElementById('refresh').style.display = 'block';
+				refreshButton.current.style.display = 'block';
 			});
 		} else { // alert message if any of the questions were skipped
 			alert('Please select a response for each question!')
@@ -112,7 +118,6 @@ function App() {
 			}
 		});
 	}, []);
-
 
 	// on click of the "Reset Database" button, clear all data from the database (this button is set to display none - for internal use)
 	const resetDB = function() {
@@ -251,17 +256,17 @@ function App() {
 				<button className='start' onClick={startPoll}>start the poll</button>
 				<p className='credit'>Photo by <a href="https://unsplash.com/@the_modern_life_mrs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Heather Ford</a> on <a href="https://unsplash.com/s/photos/purple-background-fun?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></p>
 			</header>
-			<div className='wrapper'>
+			<div className='wrapper' ref={formRef}>
 				{/* render Form component */}
 				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} dataFromDb={dataFromDb} submitted={submitted} />
 
 				{/* "Take the Poll Again" button - displays upon submit */}
-				<button className='refresh' id='refresh' onClick={handleRefresh}>take the poll again</button>
+				<button className='refresh' id='refresh' ref={refreshButton} onClick={handleRefresh}>take the poll again</button>
 
 				{/* "Reset Database" button - display is set to none (internal use) */}
 				<button className='reset' onClick={resetDB}>Reset database</button>
 			</div>
-			<footer className='bold italic'>Created at <a href="https://junocollege.com/">Juno College</a></footer>
+			<footer className='bold italic'>Created by <a href="https://alicetsai.ca/" target="_blank" rel="noreferrer">Alice</a> at <a href="https://junocollege.com/" target="_blank" rel="noreferrer">Juno College</a></footer>
 		</div>
 	)
 }

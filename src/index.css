@@ -61,6 +61,8 @@ h1 {
   text-shadow: 5px 2px yellow;
   font-size: clamp(3rem, 2.27rem + 4.55vw, 5rem);
   text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .credit {
@@ -158,6 +160,7 @@ button {
 button:hover,
 button:focus {
   cursor: pointer;
+  opacity: 0.8;
 }
 
 .start:hover,
