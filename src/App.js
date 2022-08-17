@@ -6,16 +6,17 @@ import dress from './assets/The_dress_blueblackwhitegold.jpg';
 import Form from './Form';
 
 function App() {
-	// create variables to store queried elements
-	const form = document.getElementById('form');
-	const submitButton = document.getElementById('submit');
-	const inputsArray = document.querySelectorAll('input');
-
 	// create state to store user selections pulled from the app
 	const [userInputs, setUserInputs] = useState({});
 
 	// create state to store user selections pulled from Firebase
 	const [dataFromDb, setDataFromDb] = useState({});
+
+	// create state to store user's current view
+	const [currentQuestion, setCurrentQuestion] = useState(0);
+
+	// create state to store submission status
+	const [submitted, setSubmitted] = useState(false);
 
 	// on click of "Start Poll" button, scroll to beginning of poll
 	const startPoll = function () {
@@ -31,10 +32,6 @@ function App() {
 		// for each question in the array, check if event target name matches the question name. if matched, update the userInputs state with the value
 		qArray.forEach((q, index) => {
 			if (e.target.name === q) {
-				// scroll to next question once change in input is detected
-				if (index < (qArray.length - 1)) {
-					document.getElementById(qArray[index + 1]).scrollIntoView();
-				}
 				// update userInputs state to include the selected value of the current question (create copy of the userInputs array and add new key value pair consisting of question# and the response selected)
 				setUserInputs(current => {
 					return { ...current, [q]: e.target.value }
@@ -50,6 +47,8 @@ function App() {
 		// console.log(questions.length);
 		// only update if userInputs state contains all 6 responses
 		if (Object.keys(userInputs).length === questions.length) {
+			// update submitted state to true
+			setSubmitted(true);
 			const database = getDatabase(firebase);
 			const dbRef = ref(database);
 			get(dbRef).then(response => {
@@ -99,19 +98,8 @@ function App() {
 					setDataFromDb(response.val())
 				});
 
-				// disable all radio inputs
-				inputsArray.forEach(input => {
-					input.setAttribute('disabled', '')
-				});
-
-				// disable submit button and change styling
-				submitButton.disabled = true;
-				submitButton.style.color = 'lightgrey';
-				submitButton.style.transform = 'scale(1)';
-				submitButton.style.cursor = 'default';
-
-				// scroll to first question to show results from the top
-				form.scrollIntoView();	
+				// navigate to first question to show results from the beginning
+				setCurrentQuestion(0);
 
 				// display the "Take the poll again" button
 				document.getElementById('refresh').style.display = 'block';
@@ -139,6 +127,7 @@ function App() {
 			}
 		});
 	}, []);
+
 
 	// on click of the "Reset Database" button, clear all data from the database (set to display none)
 	const resetDB = function() {
@@ -281,7 +270,7 @@ function App() {
 			</header>
 			<div className='wrapper'>
 				{/* render Form component */}
-				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} dataFromDb={dataFromDb}/>
+				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} dataFromDb={dataFromDb} submitted={submitted} />
 
 				{/* "Take the Poll Again" button - displays upon submit */}
 				<button className='refresh' id='refresh' onClick={handleRefresh}>take the poll again</button>

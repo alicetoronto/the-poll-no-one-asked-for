@@ -14,7 +14,7 @@ const DisplayResults = function ({ dataFromDb, name }) {
         // if (selectedOption) {
             if (item === name) {
                 // console.log()
-                return <p>You're among the <span className="bold">{((selectedOptionTotal / totalCount) * 100).toFixed(0)}%</span> of people ({selectedOptionTotal} out of {totalCount}) who chose "{selectedOption}"!</p>
+                return <p>You're among <span className="bold">{((selectedOptionTotal / totalCount) * 100).toFixed(0)}%</span> of people ({selectedOptionTotal} out of {totalCount}) who chose "{selectedOption}"!</p>
             }
         // }
     }
