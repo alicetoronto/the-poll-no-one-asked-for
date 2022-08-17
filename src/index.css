@@ -1,7 +1,3 @@
-/* * {
-  border: red solid 1px;
-} */
-
 /* general styles */
 
 html {
@@ -25,6 +21,8 @@ body {
 
 .wrapper,
 header,
+form,
+.nav,
 .resultsContainer {
   display: flex;
   flex-direction: column;
@@ -77,11 +75,7 @@ h1 {
 
 /* form and form content styling */
 form {
-  /* margin-bottom: 50px; */
   width: 60%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 fieldset,
@@ -173,9 +167,6 @@ button:focus {
 }
 
 .nav {
-  display: flex;
-  flex-direction: column;
-  /* justify-content: flex-end; */
   margin-top: 30px;
 }
 
@@ -187,21 +178,15 @@ button:focus {
   width: 180px;
   background-color: var(--teal);
   color: black;
-  /* align-self: flex-end; */
 }
 
-.submitArea {
+.submitArea,
+.submit {
   width: 100%;
-  /* margin-top: 50px; */
 }
 
 .submitNote {
   font-size: 1.25rem;
-  /* margin: 50px; */
-}
-
-.submit {
-  width: 100%;
 }
 
 .refresh {
@@ -229,8 +214,7 @@ footer {
   text-shadow: 2px 2px yellow;
 }
 
-/* media queries */
-
+/* media query */
 @media (max-width: 500px) {
   .wrapper {
     width: 85%;

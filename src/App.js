@@ -28,7 +28,6 @@ function App() {
 		const qArray = questions.map(question => {
 			return question.questionName 
 		})
-		// console.log(qArray);
 		// for each question in the array, check if event target name matches the question name. if matched, update the userInputs state with the value
 		qArray.forEach((q, index) => {
 			if (e.target.name === q) {
@@ -44,45 +43,34 @@ function App() {
 	// on submit, update Firebase with user selections stored in userInputs state
 	const handleSubmit = function(e) {
 		e.preventDefault();
-		// console.log(questions.length);
+
 		// only update if userInputs state contains all 6 responses
 		if (Object.keys(userInputs).length === questions.length) {
 			// update submitted state to true
 			setSubmitted(true);
+
 			const database = getDatabase(firebase);
 			const dbRef = ref(database);
 			get(dbRef).then(response => {
-				const responseObj = response.val();
-				// console.log(responseObj);
-				// console.log(responseObj.totalCount);
 				// update totalCount of responses in Firebase by 1
+				const responseObj = response.val();
+				const dbRefTotalCount = ref(database, '/totalCount');
 				let totalResponseCount = responseObj.totalCount;
 				totalResponseCount = totalResponseCount + 1;
-				// console.log(totalResponseCount);
-				const dbRefTotalCount = ref(database, '/totalCount');
 				set(dbRefTotalCount, totalResponseCount);
 
-				// loop through each item in the UserInputs state object and match the key (i.e., the question number) against the keys in Firebase. If the keys (i.e.,question numbers) match, then match the nested keys (i.e., response option) and if those match, increase its value by 1 in Firebase (i.e., update the count of that response by 1)
+				// loop through each item in the userInputs state object and match the key (i.e., the question number) against the keys in Firebase. If the keys match, then match the nested keys (i.e., response option) and if those match, increase its value by 1 in Firebase (i.e., update the count of that response by 1)
 				for (let userInput in userInputs) {
 					for (let response in responseObj) {
 						if (userInput === response) {
-							// console.log(userInput);
-							// console.log(response);
-							// console.log('yes');
-							// console.log(responseObj[response]);
 							let questionObj = responseObj[response];
 							for (let key in questionObj) {
-								// console.log(key);
-								// console.log(userInputs[userInput]);
 								if (userInputs[userInput] === key) {
-									// console.log("match")
-									// console.log(key);
 									const dbRefKey = ref(database, `/${response}/${key}`);
 									const dbRefCurrentResponse = ref(database, `/${response}/CurrentResponse`);
 									get(dbRefKey).then(results => {
 										let responseCount = results.val();
 										responseCount = responseCount + 1;
-										// console.log(responseCount);
 										set(dbRefKey, responseCount);
 										set(dbRefCurrentResponse, userInputs[userInput]);
 									})
@@ -94,13 +82,10 @@ function App() {
 
 				// on database change, update state of dataFromDb
 				onValue(dbRef, response => {
-					// console.log(response.val());
 					setDataFromDb(response.val())
 				});
-
 				// navigate to first question to show results from the beginning
 				setCurrentQuestion(0);
-
 				// display the "Take the poll again" button
 				document.getElementById('refresh').style.display = 'block';
 			});
@@ -109,12 +94,12 @@ function App() {
 		}
 	}
 
-	// on page load, clear prior data from Firebase and listen for changes. On change, grab the data and update dataFromDb state
+	// on page load, clear prior data in the CurrentResponse node from Firebase and listen for changes. On change, grab the data from Firebase and update dataFromDb state
 	useEffect(function() {
 		const database = getDatabase(firebase);
 		const dbRef = ref(database);
 
-		// clear prior values stored in CurrentResponse key in Firebase on page load
+		// clear prior values stored in CurrentResponse node in Firebase on page load
 		get(dbRef).then(response => {
 			const responseObj = response.val();
 			// loop through every question object in Firebase and clear prior values
@@ -129,7 +114,7 @@ function App() {
 	}, []);
 
 
-	// on click of the "Reset Database" button, clear all data from the database (set to display none)
+	// on click of the "Reset Database" button, clear all data from the database (this button is set to display none - for internal use)
 	const resetDB = function() {
 		const database = getDatabase(firebase);
 		const dbRef = ref(database);
@@ -137,9 +122,7 @@ function App() {
 			const responseObj = response.val();
 			// loop through every question object in Firebase and clear prior values
 			for (let response in responseObj) {
-				// console.log(responseObj[response])
 				for (let key in responseObj[response]) {
-					// console.log(responseObj[response][key]);
 					const dbRefKey = ref(database, `/${response}/${key}`);
 					const dbRefTotalCount = ref(database, '/totalCount');
 					set(dbRefKey, 0);

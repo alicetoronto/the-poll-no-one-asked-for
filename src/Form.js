@@ -17,7 +17,6 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
     // on changes of currentQuestion state, check submitted status state and if true, disable inputs and submit button
     useEffect(function () {
         if (submitted === true) {
-            console.log('true')
             // disable all radio inputs
             const inputsArray = document.querySelectorAll('input');
             inputsArray.forEach(input => {
@@ -75,7 +74,7 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
                     }
                 </fieldset>
 
-            {/* previous and next buttons for easy navigation */}
+            {/* previous and next buttons for navigation */}
             <div className='nav'>
                 {
                     currentQuestion > 0
@@ -90,7 +89,7 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
                     : null
                 }
             </div>
-            {/* if on last question, display submit button */}
+            {/* if user is on last question, display submit button */}
             {
                 currentQuestion === (questions.length - 1)
                 ?
