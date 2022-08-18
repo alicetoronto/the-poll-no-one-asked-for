@@ -1,3 +1,15 @@
+/* general styles */
+
+html {
+  font-size: 125%;
+  scroll-behavior: smooth;
+}
+
+:root {
+  --teal: rgb(117, 219, 234);
+  --pink: rgb(240, 192, 224);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,7 +19,231 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.wrapper,
+header,
+form,
+.nav,
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  max-width: 1200px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* header */
+header {
+  height: 100vh;
+  background-image: url('./assets/heather-ford-Fq54FqucgCE-unsplash.jpg');
+  background-size: cover;
+  background-position: center 35%;
+}
+
+h1 {
+  text-shadow: 5px 2px yellow;
+  font-size: clamp(3rem, 2.27rem + 4.55vw, 5rem);
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.credit {
+  background-color: var(--pink);
+  font-size: 0.6rem;
+  align-self: flex-start;
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+  padding: 5px 10px;
+}
+
+/* form and form content styling */
+form {
+  width: 60%;
+}
+
+fieldset,
+legend,
+.resultsContainer {
+  border-radius: 10px;
+}
+
+fieldset {
+  position: relative;
+  border: 5px var(--pink) solid;
+  margin-top: 80px;
+  padding: 30px;
+  width: 100%;
+}
+
+legend {
+  font-size: 1.25rem;
+  background-color: var(--pink);
+  width: 100%;
+  margin: 15px 0;
+  padding: 15px 30px;
+}
+
+.responseContainer {
+  margin: 15px; 
+  display: flex;
+}
+
+label {
+  order: 1;
+  margin-left: 10px
+}
+
+.imgContainer {
+  width: 200px;
+  border: 5px solid pink;
+  margin: 0 auto;
+}
+
+img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.caption {
+  margin: 5px auto;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  text-align: center;
+  width: 200px;
+}
+
+/* styling of results container that gets displayed back to page on submit */
+.resultsContainer {
+  background-color: var(--teal);
+  padding: 50px;
+  width: 300px;
+  min-height: 70px;
+  position: absolute;
+  z-index: 10;
+  right: -100px;
+  top: 0;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+/* buttons and submission area */
+button {
+  border: none;
+  background-color: black;
+  color: yellow;
+  font-size: clamp(1.25rem, 1.16rem + 0.57vw, 1.5rem);
+  font-style: italic;
+  text-transform: uppercase;
+  padding: 15px 30px;
+}
+
+button:hover,
+button:focus {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.start:hover,
+.submit:hover,
+.refresh:hover {
+  transform: scale(1.1);
+}
+
+.nav {
+  margin-top: 30px;
+}
+
+.prev,
+.next {
+  font-size: 1rem;
+  padding: 10px 20px;
+  margin: 5px;
+  width: 180px;
+  background-color: var(--teal);
+  color: black;
+}
+
+.submitArea,
+.submit {
+  width: 100%;
+}
+
+.submitNote {
+  font-size: 1.25rem;
+}
+
+.refresh {
+  display: none;
+  margin-top: 50px
+}
+
+.reset {
+  display: none;
+  font-size: 0.9rem;
+  margin: 30px;
+}
+
+.submitNote,
+footer {
+  text-align: center;
+}
+
+/* footer */
+footer {
+  margin-top: 50px;
+  padding: 25px;
+  font-size: 0.9rem;
+  background-color: var(--teal);
+  text-shadow: 2px 2px yellow;
+}
+
+/* media query */
+@media (max-width: 500px) {
+  .wrapper {
+    width: 85%;
+  }
+  form {
+    margin-top: 30px;
+    width: 85%;
+  }
+  fieldset {
+    margin: 30px 0;
+    padding: 15px;
+  }
+  legend {
+    margin-left: -30px;
+  }
+  .responseContainer {
+    margin: 15px 0;
+  }
+  .submitNote {
+    margin: 50px 0;
+
+  }
+  .resultsContainer {
+    position: static;
+    width: auto;
+    padding: 0 30px;
+    margin-top: 30px;
+  }
 }
