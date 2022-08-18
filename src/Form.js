@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurrentQuestion, dataFromDb, submitted, userInputs }) {
     
     const current = questions[currentQuestion];
+    const { questionName, legend, imgSrc, alt, link, caption, firstOption, secondOption, thirdOption } = current;
 
     // on click of "previous" button, update currentQuestion state
     const handlePreviousQuestion = function (e) {
@@ -16,7 +17,7 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
         e.preventDefault();
 
         // prevent users from moving to next question without selecting a response
-        if (userInputs[current.questionName]) {
+        if (userInputs[questionName]) {
             setCurrentQuestion(currentQuestion + 1)
         } else {
             alert('You trying to break this app?? Please select a response!')
@@ -30,7 +31,7 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
 
         // on changes of userInputs state, check whether question name in userInputs state object matches current question name. If matched, check which input has the value that matches the response option stored in state object and set that input's checked attribute to true so that the input stays selected/checked between re-renders 
         for (let q in userInputs) {
-            if (q === current.questionName) {
+            if (q === questionName) {
                 const inputsArray = document.querySelectorAll('input');
                 inputsArray.forEach(input => {
                     if (userInputs[q] === input.value) {
@@ -55,37 +56,37 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
                 submitNote.current.style.display = 'none'
             }
         }
-    }, [currentQuestion, current, submitted, userInputs])
+    }, [currentQuestion, questionName, submitted, userInputs])
 
     // display question to the page
     
     return (
         <form>
-            <fieldset key={current.questionName} id={current.questionName}>
-                <legend className='bold'>{current.legend}</legend>
-                    {current.imgSrc
+            <fieldset key={questionName} id={questionName}>
+                <legend className='bold'>{legend}</legend>
+                    {imgSrc
                         ?
                         <div>
                             <div className='imgContainer'>
-                            <img src={current.imgSrc} alt={current.alt} />
+                            <img src={imgSrc} alt={alt} />
                             </div>
-                        <p className='caption'><a href={current.link}>{current.caption}</a></p>
+                        <p className='caption'><a href={link}>{caption}</a></p>
                         </div>
                         : null
                     }
                     <div className='responseContainer'>
-                        <label htmlFor={current.firstOption.inputValue}>{current.firstOption.labelText}</label>
-                        <input type='radio' name={current.questionName} value={current.firstOption.inputValue} id={current.firstOption.inputValue} onChange={handleChange} />
+                        <label htmlFor={firstOption.inputValue}>{firstOption.labelText}</label>
+                        <input type='radio' name={questionName} value={firstOption.inputValue} id={firstOption.inputValue} onChange={handleChange} />
                     </div>
 
                     <div className='responseContainer'>
-                        <label htmlFor={current.secondOption.inputValue}>{current.secondOption.labelText}</label>
-                        <input type='radio' name={current.questionName} value={current.secondOption.inputValue} id={current.secondOption.inputValue} onChange={handleChange} />
+                        <label htmlFor={secondOption.inputValue}>{secondOption.labelText}</label>
+                        <input type='radio' name={questionName} value={secondOption.inputValue} id={secondOption.inputValue} onChange={handleChange} />
                     </div>
 
                     <div className='responseContainer'>
-                        <label htmlFor={current.thirdOption.inputValue}>{current.thirdOption.labelText}</label>
-                        <input type='radio' name={current.questionName} value={current.thirdOption.inputValue} id={current.thirdOption.inputValue} onChange={handleChange} />
+                        <label htmlFor={thirdOption.inputValue}>{thirdOption.labelText}</label>
+                        <input type='radio' name={questionName} value={thirdOption.inputValue} id={thirdOption.inputValue} onChange={handleChange} />
                     </div>
 
                     {/* display results if dataFromDb state object contains as many items as there are questions + 1 (for the node representing total count in addition to the nodes representing each question) */}
