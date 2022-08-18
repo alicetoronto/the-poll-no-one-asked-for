@@ -19,13 +19,13 @@ function App() {
 	const [submitted, setSubmitted] = useState(false);
 
 	// on click of "Start Poll" button, scroll to beginning of poll
-	// use useRef hook and assign ref prop to the div containing the form element in order to reference it
+	// store the return value of calling the useRef hook and pass it as a ref prop to the div containing the form element in order to reference it for the startPoll function
 	const formRef = useRef(null);
 	const startPoll = function () {
 		formRef.current.scrollIntoView();
 	}
 
-	// use useRef hook and assign ref prop to the "Take the Poll Again" button element in order to reference it in the handleSubmit function (to set display to block instead of none)
+	// store the return value of calling the useRef hook and pass it as a ref prop to the "Take the Poll Again" button element in order to reference it in the handleSubmit function
 	const refreshButton = useRef(null);
 
 	// on change of any inputs, update userInputs state
@@ -34,7 +34,7 @@ function App() {
 		const qArray = questions.map(question => {
 			return question.questionName 
 		})
-		// for each question in the array, check if event target name matches the question name. if matched, update the userInputs state with the value
+		// for each question in the array, check if event target name matches the question name. if matched, update the userInputs state with the value as well as update the checked attribute of that particular input
 		qArray.forEach((q, index) => {
 			if (e.target.name === q) {
 				// update userInputs state to include the selected value of the current question (create copy of the userInputs array and add new key value pair consisting of question# and the response selected)
@@ -258,7 +258,7 @@ function App() {
 			</header>
 			<div className='wrapper' ref={formRef}>
 				{/* render Form component */}
-				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} dataFromDb={dataFromDb} submitted={submitted} />
+				<Form questions={questions} handleChange={handleChange} handleSubmit={handleSubmit} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} dataFromDb={dataFromDb} submitted={submitted} userInputs={userInputs}/>
 
 				{/* "Take the Poll Again" button - displays upon submit */}
 				<button className='refresh' id='refresh' ref={refreshButton} onClick={handleRefresh}>take the poll again</button>

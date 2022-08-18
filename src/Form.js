@@ -1,7 +1,10 @@
 import DisplayResults from './DisplayResults';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurrentQuestion, dataFromDb, submitted }) {
+function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurrentQuestion, dataFromDb, submitted, userInputs }) {
+    
+    const current = questions[currentQuestion];
+
     // on click of "previous" button, update currentQuestion state
     const handlePreviousQuestion = function (e) {
         e.preventDefault();
@@ -11,11 +14,33 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
     // on click of "next" button, update currentQuestion state
     const handleNextQuestion = function (e) {
         e.preventDefault();
-        setCurrentQuestion(currentQuestion + 1)
+
+        // prevent users from moving to next question without selecting a response
+        if (userInputs[current.questionName]) {
+            setCurrentQuestion(currentQuestion + 1)
+        } else {
+            alert('You trying to break this app?? Please select a response!')
+        }
     }
 
-    // on changes of currentQuestion state, check submitted status state and if true, disable inputs and submit button
+    // store the return value of calling the useRef hook and pass it as a ref prop to the submitNote paragraph element in order to reference it in the useEffect
+    const submitNote = useRef(null);
+    
     useEffect(function () {
+
+        // on changes of userInputs state, check whether question name in userInputs state object matches current question name. If matched, check which input has the value that matches the response option stored in state object and set that input's checked attribute to true so that the input stays selected/checked between re-renders 
+        for (let q in userInputs) {
+            if (q === current.questionName) {
+                const inputsArray = document.querySelectorAll('input');
+                inputsArray.forEach(input => {
+                    if (userInputs[q] === input.value) {
+                        input.checked = true;
+                    }  
+                });
+            }
+        }
+
+        // on changes of currentQuestion state, check submitted status state and if true, disable inputs and submit button
         if (submitted === true) {
             // disable all radio inputs
             const inputsArray = document.querySelectorAll('input');
@@ -27,14 +52,13 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
             if (document.getElementById('submit')) {
                 const submitButton = document.getElementById('submit');
                 submitButton.style.display = 'none';
-                document.querySelector('#submitNote').style.display = 'none';
+                submitNote.current.style.display = 'none'
             }
-
         }
-    }, [currentQuestion, submitted])
+    }, [currentQuestion, current, submitted, userInputs])
 
     // display question to the page
-    const current = questions[currentQuestion];
+    
     return (
         <form>
             <fieldset key={current.questionName} id={current.questionName}>
@@ -94,7 +118,7 @@ function Form({ questions, handleChange, handleSubmit, currentQuestion, setCurre
                 currentQuestion === (questions.length - 1)
                 ?
                 <div className='submitArea'>
-                    <p className='submitNote bold italic' id='submitNote'>Submit to see how your responses compare to others who took the poll!</p>
+                    <p className='submitNote bold italic' ref={submitNote}>Submit to see how your responses compare to others who took the poll!</p>
                     <button className='submit' id="submit" onClick={handleSubmit}>Submit</button>
                 </div>
                 : null
